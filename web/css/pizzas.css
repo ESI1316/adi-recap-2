@@ -1,0 +1,25 @@
+.pizza-name
+{
+    display: inline-block;
+}
+
+.select-pizza
+{
+    margin-left: 10px;
+}
+
+.selected
+{
+    font-weight: bold;
+}
+
+#pizza, #garniture
+{
+    vertical-align: top;
+    display: inline-block;
+}
+
+#garniture
+{
+    margin-left : 30px;
+}

@@ -1,5 +1,6 @@
 package servlet;
 
+import be.esi.adi2.pizza.business.PizzaBusinessException;
 import be.esi.adi2.pizza.business.PizzaFacade;
 import be.esi.adi2.pizza.dto.ClientDto;
 import java.io.IOException;
@@ -84,6 +85,10 @@ public class FrontController extends HttpServlet {
                 case "loginEmail":
                     page = loginEmail(request, response);
                     break;
+                    
+                case "disconnect":
+                    page = disconnect(request, response);
+                    break;
                 
                 case "showPizzas":
                     page = showPizzas(request, response);
@@ -113,66 +118,104 @@ public class FrontController extends HttpServlet {
 
     private String newClient(HttpServletRequest request, HttpServletResponse response) {
         
-        
-        String page="";
+        String page;
         
         try {
-            String name = "nom du client"; // A modifier
-            String email = "email du client"; // A modifier
-            String address = "adresse du client"; // A modifier
-            // Si un client existe déjà avec l'email donné, c'est l'id de ce client
-            // qui sera retourné par la méthode saveIfNotExist
-            int id = PizzaFacade.saveIfNotExistClient(name, email, address);
-            request.getSession().setAttribute("clientid", id);
             
-            page = "WEB-INF/nouveau.jsp";
+            String name = request.getParameter("nom");
+            String email = request.getParameter("email");
+            String address = request.getParameter("adresse");
+           
+            if (name != null && !name.isEmpty() && 
+                email != null && !email.isEmpty() &&
+                address != null && !address.isEmpty())
+            {
+                // Si un client existe déjà avec l'email donné, c'est l'id de ce client
+                // qui sera retourné par la méthode saveIfNotExist
+                int id = PizzaFacade.saveIfNotExistClient(name, email, address);
+                request.setAttribute("message", "Votre ID est : " + id);
+            }
+          
+            page = "WEB-INF/message.jsp";
+            
         } catch (Exception ex) {
             page = "WEB-INF/Error/error.jsp";
             request.setAttribute("error", ex.getMessage());
         }
+        
         return page;
     }
 
     private String loginId(HttpServletRequest request, HttpServletResponse response) {
-        String page="";
-        try {
-            int id = 0; // A modifier
+        
+        String page;
+        
+        try 
+        {
+            int id = Integer.parseInt(request.getParameter("id"));
             ClientDto client = PizzaFacade.getClient(id);
-            // A compléter
-        } catch (Exception ex) {
+            request.getSession().setAttribute("client", client);
+            request.setAttribute("message", "Vous êtes connecté !");
+            page = "WEB-INF/message.jsp";
+        } 
+        catch (PizzaBusinessException ex)
+        {
             page = "WEB-INF/Error/error.jsp";
             request.setAttribute("error", ex.getMessage());
+        } 
+        catch (NumberFormatException nfe)
+        {
+            page = "WEB-INF/connexion.jsp";
+            request.setAttribute("invalid-id", "ID invalide"); 
         }
+        
         return page;
     }
 
+    
+    private String disconnect(HttpServletRequest request, HttpServletResponse response)
+    {
+        request.getSession().removeAttribute("client");
+        return "WEB-INF/accueil.jsp";
+    }
+    
     private String loginEmail(HttpServletRequest request, HttpServletResponse response) {
-        String page = "";
+        
+        String page;
+        
         try {
-            String email = "email du client"; // A modifier
+            
+            String email = request.getParameter("email");
             ClientDto client = PizzaFacade.getClient(email);
-            // A compléter
-        } catch (Exception ex) {
+            request.getSession().setAttribute("client", client);
+            
+            request.setAttribute("message", "Vous êtes connecté !");
+            page = "WEB-INF/message.jsp";
+            
+        } catch (PizzaBusinessException ex) {
             page = "WEB-INF/Error/error.jsp";
             request.setAttribute("error", ex.getMessage());
         }
+        
         return page;
     }
 
     private String showPizzas(HttpServletRequest request, HttpServletResponse response) {
-        String page="";
+        String page;
+        
         try {
             // Assigne, si nécessaire (si null car n'a pas déjà été fait), 
             // la liste des pizzas persistées à l'attribut de session "pizzas", 
-            if (request.getSession().getAttribute("pizzas") == null) {
+            if (request.getSession().getAttribute("pizzas") == null) 
                 request.getSession().setAttribute("pizzas", PizzaFacade.getPizza());
-            }
+            
             // Assigne, si nécessaire (si null car n'a pas déjà été fait),
             // la liste des garnitures persistées à l'attribut de session "toppings" 
-            if (request.getSession().getAttribute("toppings") == null) {
+            if (request.getSession().getAttribute("toppings") == null) 
                 request.getSession().setAttribute("toppings", PizzaFacade.getToppings());
-            }
-            // A compléter
+            
+            
+            page = "WEB-INF/Pizzeria/pizzas.jsp";
         } catch (Exception ex) {
             request.setAttribute("error", ex.getMessage());
             page = "WEB-INF/Error/error.jsp";
@@ -181,20 +224,17 @@ public class FrontController extends HttpServlet {
     }
 
     private String orderPizza(HttpServletRequest request, HttpServletResponse response) {
-        String page = "WEB-INF/Pizzeria/todo.jsp";
-        request.setAttribute("todo", "orderPizza");
+        String page  = "WEB-INF/Pizzeria/pizzas.jsp";
         return page;
     }
 
     private String showOrder(HttpServletRequest request, HttpServletResponse response) {
-        String page = "WEB-INF/Pizzeria/todo.jsp";
-        request.setAttribute("todo", "showOrder");
+        String page = "WEB-INF/Pizzeria/pizzas.jsp";
         return page;
     }
 
     private String showHistory(HttpServletRequest request, HttpServletResponse response) {
-        String page = "WEB-INF/Pizzeria/todo.jsp";
-        request.setAttribute("todo", "showHistory");
+        String page = "WEB-INF/Pizzeria/pizzas.jsp";
         return page;
     }
 

@@ -4,9 +4,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel='stylesheet' type='text/css' href='css/base.css' media='all' />
-        <link rel='stylesheet' type='text/css' href='css/nouveau.css' media='all' />
+        <link rel='stylesheet' type='text/css' href='css/form.css' media='all' />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="http://cdn.jsdelivr.net/jquery.validation/1.13.1/jquery.validate.min.js"></script>
+        <script src="js/verification.js"></script>
         <title>Pizzeria en ligne</title>
     </head>
     <body>
@@ -19,7 +20,7 @@
         
         <section id="form-section" >
             <h3>Création d'un nouveau compte</h3>
-            <form action="Pizzeria">
+            <form id="form-nouveau" action="Pizzeria">
                 <label for="nom">Nom</label>
                 <input type="text" name="nom" />
                 <br/>
@@ -29,11 +30,11 @@
                 <br/>
                 
                 <label for="adresse">Adresse</label>
-                <input type="text" name="Adresse"/>
+                <input type="text" name="adresse"/>
                 <br/>
                 
                 <input type="hidden" name="action" value="newClient"/>
-                <input type="submit" name="submit"/>
+                <input class="submit" type="submit" name="submit"/>
                 
                 
             </form>
