@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header, footer, section, aside, nav, article {
+    display: block;
+}
+
+body {
+    margin: 0 auto;
+    padding: 22px 0;
+    width: 940px;
+    font: 13px/22px Helvetica, Arial, sans-serif;
+    background: #F0F0F0;
+}
+
+h1, h2 {
+    font-size: 28px;
+    line-height: 44px;
+    padding: 22px 0;
+}
+
+h3 {
+    font-size: 18px;
+    line-height: 22px;
+    padding: 11px 0;
+}
+
+p {
+    padding-bottom: 22px;
+}
+
+
+
+nav {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: url("../images/bgMenu.png");
+}
+
+nav ul {
+    margin: 0 auto;
+    width: 940px;
+    list-style: none;
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    margin-right: 20px;
+    width: 140px;
+    font-size: 14px;
+    line-height: 44px;
+    text-align: center;
+    text-decoration: none;
+    color: #777;
+}
+
+nav ul li a:hover {
+    color: #fff;
+}
+
+nav ul li.selected a {
+    color: #fff;
+}
+
+
+
+#intro {
+    position: relative;
+    margin-top: 66px;
+    padding: 44px;
+    background: #970026;
+
+}
+
+#intro h2, #intro p {
+    position: relative;
+    z-index: 9999;
+    width: 336px;
+}
+
+#intro h2 {
+    padding: 0 0 22px 0;
+    font-weight: normal;
+    color: #fff;
+}
+
+#intro p {
+    padding: 0;
+    color: #d9f499;
+}
+
+#intro img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 410px;
+    height: 100%;
+}
+
+
+footer
+{
+    text-align: center;
+    margin-top: 100px;
+}
