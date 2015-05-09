@@ -4,6 +4,8 @@ import be.esi.adi2.pizza.business.PizzaBusinessException;
 import be.esi.adi2.pizza.business.PizzaFacade;
 import be.esi.adi2.pizza.dto.ClientDto;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -90,22 +92,14 @@ public class FrontController extends HttpServlet {
                     page = disconnect(request, response);
                     break;
                 
-                case "showPizzas":
-                    page = showPizzas(request, response);
-                    break;
-                
                 case "orderPizza":
                     page = orderPizza(request, response);
                     break;
-                
-                case "showOrder":
-                    page = showOrder(request, response);
-                    break;
-                
-                case "showHistory":
-                    page = showHistory(request, response);
-                    break;
                     
+                case "endCommand":
+                    page = endCommand(request, response);
+                    break;
+                
                 default:
                     page = "WEB-INF/Error/error.jsp";
                     request.setAttribute("error", "ce n'est pas normal d'arriver ici !");
@@ -229,12 +223,63 @@ public class FrontController extends HttpServlet {
     }
 
     private String showOrder(HttpServletRequest request, HttpServletResponse response) {
-        String page = "WEB-INF/Pizzeria/pizzas.jsp";
+        
+        String page = "WEB-INF/orders.jsp";
+        ClientDto client = (ClientDto) request.getSession().getAttribute("client");
+        
+        if (client != null)
+        {
+            try 
+            {
+                request.setAttribute("orders", 
+                        PizzaFacade.getPendingOrder(client.getClientId()));
+            } 
+            catch (PizzaBusinessException ex)
+            {
+                request.setAttribute("error", ex.getMessage());
+                page = "WEB-INF/Error/error.jsp";
+            }
+        }
         return page;
     }
 
     private String showHistory(HttpServletRequest request, HttpServletResponse response) {
-        String page = "WEB-INF/Pizzeria/pizzas.jsp";
+        
+        String page = "WEB-INF/history.jsp";
+        ClientDto client = (ClientDto) request.getSession().getAttribute("client");
+        
+        if (client != null)
+        {
+            try 
+            {
+                request.setAttribute("historique", 
+                        PizzaFacade.getNotPendingOrders(client.getClientId()));
+            } 
+            catch (PizzaBusinessException ex)
+            {
+                request.setAttribute("error", ex.getMessage());
+                page = "WEB-INF/Error/error.jsp";
+            }
+        }
+        return page;
+    }
+    
+     private String endCommand(HttpServletRequest request, HttpServletResponse response) {
+        
+        String page;
+        ClientDto client = (ClientDto) request.getSession().getAttribute("client");
+
+        try 
+        {
+            PizzaFacade.setNotPending(client.getClientId());
+            page = showOrder(request, response);
+        } 
+        catch (PizzaBusinessException ex)
+        {
+            request.setAttribute("error", ex.getMessage());
+            page = "WEB-INF/Error/error.jsp";
+        }
+        
         return page;
     }
 

@@ -23,3 +23,15 @@
 {
     margin-left : 30px;
 }
+
+.hide
+{
+    display: none;
+}
+
+#pizza-command
+{
+    margin-top: 30px;
+    margin-left: 100px;
+}
+

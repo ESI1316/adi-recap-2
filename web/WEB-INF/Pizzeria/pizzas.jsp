@@ -18,7 +18,21 @@
        
 
         <c:if test="${not empty client}">
-            <!-- Ajouter order -->
+            <button class="command-button" id="pizza-command">
+                Pizza à la carte
+            </button>
+            <div id="command" class="hide">
+                <h2>Votre commande : </h2>
+                <div id="mesPizzas">
+                    <h3>Pizzas :</h3>
+                </div>
+                
+                <div id="mesGarnitures">
+                    <h3>Garnitures :</h3>
+                </div>
+                <button class="command-button" id="cancel-command">Annuler</button>
+            </div>
+            <br/>
         </c:if>
         
         <c:set var="pizzas" value="${sessionScope.pizzas}"></c:set>

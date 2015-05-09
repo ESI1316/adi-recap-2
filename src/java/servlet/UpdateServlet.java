@@ -37,8 +37,26 @@ public class UpdateServlet extends HttpServlet {
         
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
+        
+        String action = request.getParameter("action");
+        
+        switch (action)
+        {
+            case "garniture":
+                updateGarniture(request, response);
+                break;
+            default:
+                // Pas fini
+                break;
+                
+        }
+        
        
-        Collection<ToppingDto> toppings;
+    }
+     
+     private void updateGarniture(HttpServletRequest request, HttpServletResponse response) throws IOException
+     {
+         Collection<ToppingDto> toppings;
          try {
              toppings = PizzaFacade.getToppings(Integer.parseInt(request.getParameter("pizza-id")));
          } catch (PizzaBusinessException ex) {
@@ -48,7 +66,7 @@ public class UpdateServlet extends HttpServlet {
          JSONArray array = new JSONArray(toppings);
          
         response.getWriter().write(array.toString());
-    }
+     }
  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
